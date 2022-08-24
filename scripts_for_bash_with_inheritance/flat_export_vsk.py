@@ -43,14 +43,16 @@ headers_eng = {
 df = pd.read_csv(input_file_path)
 df = df.replace({np.nan: None})
 df = df.rename(columns=headers_eng)
-df = df.loc[:, ~df.columns.isin(['tnved_group_id', 'direction', 'tnved_group_name', 'shipper_inn',
+df = df.loc[:, ~df.columns.isin(['direction', 'tnved_group_name', 'shipper_inn',
                                  'shipper_name_unified', 'destination_country'])]
 parsed_data = df.to_dict('records')
 for dict_data in parsed_data:
     for key, value in dict_data.items():
         with contextlib.suppress(Exception):
-            if key in ['year', 'month', 'teu', 'container_size', 'tnved_group_id']:
+            if key in ['year', 'month', 'teu', 'container_size']:
                 dict_data[key] = int(value)
+            elif key in ['tnved_group_id']:
+                dict_data[key] = f"{int(value):02d}"
             elif key == 'terminal':
                 dict_data[key] = os.environ.get('XL_VSK_EXPORT')
 
