@@ -19,7 +19,7 @@ headers_eng = {
     "Экспедитор": "expeditor",
     "Отправитель (исходное название)": "shipper_name",
     "Номер контейнера": "container_number",
-    "Порт (предобработка)": "destination_port",
+    "Порт (предобработка)": "tracking_seaport",
     "Страна (предобратока)": "destination_country",
     "Груз": "goods_name",
     "TEU": "teu",
@@ -30,9 +30,8 @@ headers_eng = {
     "ИНН (извлечен через excel)": "shipper_inn",
     "УНИ-компания (подтянута через ИНН)": "shipper_name_unified",
     "Страна": "shipper_country",
-    "Регион компании": "shipper_region",
     "Номер ГТД": "gtd_number",
-    "Тип Парка": "park_type",
+    "Тип Парка": "is_empty",
     "ТНВЭД": "tnved",
     "Судно": "ship_name",
     "Получатель": "consignee_name",
@@ -64,6 +63,10 @@ for dict_data in parsed_data:
                 dict_data[key] = f"{int(value)}"
             elif key == 'terminal':
                 dict_data[key] = os.environ.get('XL_VSK_EXPORT')
+            elif key == 'shipment_date':
+                dict_data[key] = str(datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S").date())
+            elif key in 'is_empty':
+                dict_data[key] = value == 'Порожний'
 
     dict_data['original_file_name'] = os.path.basename(input_file_path)
     dict_data['original_file_parsed_on'] = str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
