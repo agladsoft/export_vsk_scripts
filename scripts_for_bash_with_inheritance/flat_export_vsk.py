@@ -16,6 +16,7 @@ headers_eng = {
     "Терминал": "terminal",
     "Направление": "direction",
     "Линия": "line",
+    "Рейс": "voyage",
     "Экспедитор": "expeditor",
     "Отправитель (исходное название)": "shipper_name",
     "Номер контейнера": "container_number",
@@ -23,8 +24,11 @@ headers_eng = {
     "Страна (предобратока)": "destination_country",
     "Груз": "goods_name",
     "TEU": "teu",
+    "Вес нетто": "goods_weight_netto",
+    "Вес брутто": "goods_weight_brutto",
     "Размер контейнера": "container_size",
     "Тип контейнера": "container_type",
+    "Кол-во контейнеров, шт.": "container_count",
     "Группа груза по ТНВЭД (проставляется вручную через код ТНВЭД - ячека Х)": "tnved_group_id",
     "Наименование Группы (подтягивается по коду через справочник)": "tnved_group_name",
     "ИНН (извлечен через excel)": "shipper_inn",
@@ -65,8 +69,12 @@ for dict_data in parsed_data:
                 dict_data[key] = os.environ.get('XL_VSK_EXPORT')
             elif key == 'shipment_date':
                 dict_data[key] = str(datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S").date())
-            elif key in 'is_empty':
-                dict_data[key] = value == 'Порожний'
+            elif key in ['is_empty']:
+                dict_data[key] = value in ['1', 1, 'да', 'Да', 'True']
+            elif key in ['goods_weight_netto', 'goods_weight_brutto']:
+                dict_data[key] = float(value)
+            elif key in ['container_count']:
+                dict_data[key] = int(value)
 
     dict_data['original_file_name'] = os.path.basename(input_file_path)
     dict_data['original_file_parsed_on'] = str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
