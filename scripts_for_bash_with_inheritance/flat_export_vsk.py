@@ -35,7 +35,7 @@ headers_eng = {
     "УНИ-компания (подтянута через ИНН)": "shipper_name_unified",
     "Страна": "shipper_country",
     "Номер ГТД": "gtd_number",
-    "Тип Парка": "is_empty",
+    "Порожний": "is_empty",
     "ТНВЭД": "tnved",
     "Судно": "ship_name",
     "Получатель": "consignee_name",
