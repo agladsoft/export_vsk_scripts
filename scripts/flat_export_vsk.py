@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import contextlib
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
@@ -57,7 +58,8 @@ class ExportVSK(object):
         """
         Change data types or changing values.
         """
-        df['shipment_date'] = df['shipment_date'].dt.date.astype(str)
+        with contextlib.suppress(KeyError):
+            df['shipment_date'] = df['shipment_date'].dt.date.astype(str)
 
     def write_to_json(self, parsed_data) -> None:
         """
