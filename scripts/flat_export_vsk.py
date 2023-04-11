@@ -87,5 +87,5 @@ class ExportVSK(object):
         self.write_to_json(df.to_dict('records'))
 
 
-export_nw: ExportVSK = ExportVSK(sys.argv[1], sys.argv[2])
-export_nw.main()
+export_vsk: ExportVSK = ExportVSK(sys.argv[1], sys.argv[2])
+export_vsk.main()
