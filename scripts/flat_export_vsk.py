@@ -58,7 +58,7 @@ class ExportVSK(object):
         """
         Change data types or changing values.
         """
-        with contextlib.suppress(KeyError):
+        with contextlib.suppress(Exception):
             df['shipment_date'] = df['shipment_date'].dt.date.astype(str)
 
     def write_to_json(self, parsed_data) -> None:
