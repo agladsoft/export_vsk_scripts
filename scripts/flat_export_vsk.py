@@ -82,8 +82,6 @@ class ExportVSK(object):
         df = df.rename(columns=headers_eng)
         renamed_columns = list(df.columns)
         df = df.drop(columns=set(original_columns) & set(renamed_columns))
-        df = df.loc[:, ~df.columns.isin(['direction', 'tnved_group_name', 'shipper_inn',
-                                         'shipper_name_unified', 'destination_country'])]
         df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
         self.add_new_columns(df)
         self.change_type_and_values(df)
