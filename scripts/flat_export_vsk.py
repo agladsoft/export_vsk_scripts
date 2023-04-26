@@ -22,7 +22,7 @@ headers_eng: dict = {
     "Страна (предобратока)": "destination_country",
     "Груз": "goods_name",
     "TEU": "teu",
-    "Вес нетто": "goods_weight_netto",
+    "Вес нетто": "goods_weight_with_package",
     "Вес брутто": "goods_weight_brutto",
     "Размер контейнера": "container_size",
     "Тип контейнера": "container_type",
