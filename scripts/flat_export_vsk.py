@@ -4,6 +4,7 @@ import json
 import contextlib
 import numpy as np
 import pandas as pd
+from parsed import ParsedDf
 from pandas import DataFrame
 from datetime import datetime
 
@@ -87,6 +88,7 @@ class ExportVSK(object):
         self.change_type_and_values(df)
         df = df.replace({np.nan: None, "NaT": None})
         df["direction"] = df["direction"].replace({"импорт": "import", "экспорт": "export", "каботаж": "cabotage"})
+        ParsedDf(df).get_port()
         self.write_to_json(df.to_dict('records'))
 
 
