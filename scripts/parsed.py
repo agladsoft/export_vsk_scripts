@@ -58,6 +58,9 @@ LINES = ['СИНОКОР РУС ООО', 'HEUNG-A LINE CO., LTD', 'MSC', 'SINOKO
          'ARKAS', 'arkas', 'Arkas',
          'MSC', 'msc', 'Msc', 'SINOKOR', 'sinokor', 'Sinokor', 'SINAKOR', 'sinakor', 'HUENG-A LINE',
          'HEUNG-A LINE CO., LTD', 'heung']
+HEUNG_AND_SINOKOR = ['СИНОКОР РУС ООО', 'HEUNG-A LINE CO., LTD', 'SINOKOR', 'SINAKOR', 'SKR', 'sinokor', 'HUENG-A LINE',
+                     'HEUNG-A LINE CO., LTD', 'heung']
+
 IMPORT = ['импорт', 'import']
 EXPORT = ['export', 'экспорт']
 
@@ -70,6 +73,11 @@ class ParsedDf:
             'Content-Type': 'application/json'
         }
 
+    @staticmethod
+    def check_lines(row: dict) -> bool:
+        if row.get('line').upper() in HEUNG_AND_SINOKOR:
+            return False
+        return True
     @staticmethod
     def get_direction(direction):
         if direction.lower() in IMPORT:
@@ -117,7 +125,7 @@ class ParsedDf:
         for index, row in self.df.iterrows():
             if row.get('line').upper() not in LINES:
                 continue
-            if any([i in row.get('goods_name', '').upper() for i in ["ПОРОЖ", "ПРОЖ"]]):
+            if self.check_lines(row) and any([i in row.get('goods_name', '').upper() for i in ["ПОРОЖ", "ПРОЖ"]]):
                 continue
             consignment = self.get_consignment(row)
             if row.get(consignment, False) not in data:
