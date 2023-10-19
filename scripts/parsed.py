@@ -157,7 +157,7 @@ class ParsedDf:
                                                               self.df.get('is_auto_tracking')[index])
                         data[row.get(consignment)].setdefault('is_auto_tracking_ok',
                                                               self.df.get('is_auto_tracking_ok')[index])
-                    except KeyError as ex:
+                    except TypeError as ex:
                         logging.info(f'Ошибка при получение ключа из DataFrame {ex}')
             else:
                 tracking_seaport = data.get(row.get(consignment)).get('tracking_seaport') if data.get(
@@ -178,7 +178,7 @@ class ParsedDf:
             self.df.at[index, 'tracking_seaport'] = port
         else:
             self.df.at[index, 'is_auto_tracking_ok'] = False
-
+            self.df.at[index, 'tracking_seaport'] = port
     @staticmethod
     def check_line(line):
         if line not in LINES:
