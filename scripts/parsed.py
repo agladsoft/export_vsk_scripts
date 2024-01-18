@@ -88,10 +88,17 @@ class ParsedDf:
         return direction
 
     @staticmethod
-    def body(row, consignment):
+    def get_number_consignment(consignment):
+        lst_consignment: list = consignment.strip().split(',')
+        if len(lst_consignment) > 1:
+            return lst_consignment[0]
+        return consignment
+
+    def body(self, row, consignment):
+        consignment_number = self.get_number_consignment(row.get(consignment))
         data = {
             'line': row.get('line'),
-            'consignment': row.get(consignment),
+            'consignment': consignment_number,
             'direction': row.get('direction', 'export')
 
         }
@@ -179,6 +186,7 @@ class ParsedDf:
         else:
             self.df.at[index, 'is_auto_tracking_ok'] = False
             self.df.at[index, 'tracking_seaport'] = port
+
     @staticmethod
     def check_line(line):
         if line not in LINES:
