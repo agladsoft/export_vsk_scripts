@@ -1,3 +1,4 @@
+import os
 import json
 import logging
 import requests
@@ -5,7 +6,7 @@ import requests
 
 class Parsed:
     def __init__(self):
-        self.url = "http://158.160.77.121:8004"
+        self.url = f"http://{os.environ['IP_ADDRESS_CONSIGNMENTS']}:8004"
         self.headers = {
             'Content-Type': 'application/json'
         }
@@ -68,7 +69,7 @@ EXPORT = ['export', 'экспорт']
 class ParsedDf:
     def __init__(self, df):
         self.df = df
-        self.url = "http://158.160.77.121:8004"
+        self.url = f"http://{os.environ['IP_ADDRESS_CONSIGNMENTS']}:8004"
         self.headers = {
             'Content-Type': 'application/json'
         }
@@ -108,7 +109,7 @@ class ParsedDf:
         body = self.body(row, consignment)
         body = json.dumps(body)
         try:
-            answer = requests.post('http://158.160.77.121:8004', data=body, headers=self.headers, timeout=120)
+            answer = requests.post(self.url, data=body, headers=self.headers, timeout=120)
             if answer.status_code != 200:
                 return None
             result = answer.json()
