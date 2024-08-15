@@ -54,8 +54,10 @@ class ExportVSK(object):
         """
         with contextlib.suppress(Exception):
             df['shipment_date'] = df['shipment_date'].dt.date.astype(str)
-            df[['year', 'month', 'teu', 'container_size', 'tnved_group_id']] = \
-                df[['year', 'month', 'teu', 'container_size', 'tnved_group_id']].astype('Int64')
+            df[['year', 'month', 'teu', 'container_size', 'tnved_group_id', 'tnved', 'container_count']] = \
+                df[['year', 'month', 'teu', 'container_size', 'tnved_group_id', 'tnved', 'container_count']].astype(
+                    'Int64')
+            df['is_empty'] = df['is_empty'].astype(bool)
 
     def add_new_columns(self, df: DataFrame) -> None:
         """
