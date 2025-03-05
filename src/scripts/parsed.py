@@ -5,15 +5,11 @@ import time
 import json
 import logging
 import requests
-from typing import Optional
+from typing import Optional, List
 from dotenv import load_dotenv
 from clickhouse_connect import get_client
 from clickhouse_connect.driver import Client
 
-# LINES = ['СИНОКОР РУС ООО', 'HEUNG-A LINE CO., LTD', 'MSC', 'SINOKOR', 'SINAKOR', 'SKR', 'sinokor',
-#          'ARKAS', 'arkas', 'Arkas',
-#          'MSC', 'msc', 'Msc', 'SINOKOR', 'sinokor', 'Sinokor', 'SINAKOR', 'sinakor', 'HUENG-A LINE',
-#          'HEUNG-A LINE CO., LTD', 'heung']
 HEUNG_AND_SINOKOR = ['СИНОКОР РУС ООО', 'HEUNG-A LINE CO., LTD', 'SINOKOR', 'SINAKOR', 'SKR', 'sinokor', 'HUENG-A LINE',
                      'HEUNG-A LINE CO., LTD', 'heung']
 IMPORT = ['импорт', 'import']
@@ -66,7 +62,16 @@ def get_line_unified(item: dict, line_name: str):
     return line_name
 
 
-LINES = unified_list_line_name()
+def get_line_tracking_empty() -> List[str]:
+    client = clickhouse_client()
+    line_unified_query = client.query(
+        f"SELECT line FROM reference_lines where line_unified in ('REEL SHIPPING','HEUNG-A LINE','SINOKOR')")
+    line_unified = line_unified_query.result_rows
+    return [i[0].upper() for i in line_unified]
+
+
+
+
 
 class ParsedDf:
     def __init__(self, df):
@@ -78,7 +83,7 @@ class ParsedDf:
 
     @staticmethod
     def check_lines(row: dict) -> bool:
-        if row.get('line', '').upper() in HEUNG_AND_SINOKOR:
+        if row.get('line', '').upper() in get_line_tracking_empty():
             return False
         return True
 
@@ -97,7 +102,7 @@ class ParsedDf:
 
     def body(self, row, consignment):
         consignment_number = self.get_number_consignment(row.get(consignment))
-        line_unified = get_line_unified(LINES, row.get('line'))
+        line_unified = get_line_unified(unified_list_line_name(), row.get('line'))
         return {
             'line': line_unified,
             'consignment': consignment_number,
@@ -177,7 +182,7 @@ class ParsedDf:
 
     @staticmethod
     def check_line(line):
-        if line not in LINES:
+        if line not in unified_list_line_name():
             return True
         return False
 

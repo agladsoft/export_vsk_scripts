@@ -4,7 +4,7 @@ import json
 import contextlib
 import numpy as np
 import pandas as pd
-from parsed import ParsedDf
+from src.scripts.parsed import ParsedDf
 from pandas import DataFrame
 from datetime import datetime
 
@@ -91,6 +91,6 @@ class ExportVSK(object):
         df = df.replace({np.nan: None, "NaT": None})
         self.write_to_json(df.to_dict('records'))
 
-
-export_vsk: ExportVSK = ExportVSK(sys.argv[1], sys.argv[2])
-export_vsk.main()
+if __name__ == "__main__":
+    export_vsk: ExportVSK = ExportVSK(sys.argv[1], sys.argv[2])
+    export_vsk.main()
