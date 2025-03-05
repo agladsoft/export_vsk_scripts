@@ -101,7 +101,7 @@ class ParsedDf:
         return {
             'line': line_unified,
             'consignment': consignment_number,
-            'direction': row.get('direction', 'import'),
+            'direction': row.get('direction', 'export'),
         }
 
     def get_port_with_recursion(self, number_attempts: int, row, consignment) -> Optional[str]:
